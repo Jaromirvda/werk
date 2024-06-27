@@ -1,0 +1,130 @@
+{
+  "gpus": [
+    {
+      "name": "AMD Radeon RX 550",
+      "release_date": "2017-04-20",
+      "vram": "4 GB",
+      "series": "RX 500",
+      "picture": "https://example.com/amd_radeon_rx_550.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 560",
+      "release_date": "2017-04-18",
+      "vram": "4 GB",
+      "series": "RX 500",
+      "picture": "https://example.com/amd_radeon_rx_560.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 570",
+      "release_date": "2017-04-18",
+      "vram": "8 GB",
+      "series": "RX 500",
+      "picture": "https://example.com/amd_radeon_rx_570.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 580",
+      "release_date": "2017-04-18",
+      "vram": "8 GB",
+      "series": "RX 500",
+      "picture": "https://example.com/amd_radeon_rx_580.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 590",
+      "release_date": "2018-11-15",
+      "vram": "8 GB",
+      "series": "RX 500",
+      "picture": "https://example.com/amd_radeon_rx_590.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 5700",
+      "release_date": "2019-07-07",
+      "vram": "8 GB",
+      "series": "RX 5000",
+      "picture": "https://example.com/amd_radeon_rx_5700.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 5700 XT",
+      "release_date": "2019-07-07",
+      "vram": "8 GB",
+      "series": "RX 5000",
+      "picture": "https://example.com/amd_radeon_rx_5700_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 5500 XT",
+      "release_date": "2019-12-12",
+      "vram": "8 GB",
+      "series": "RX 5000",
+      "picture": "https://example.com/amd_radeon_rx_5500_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 5600 XT",
+      "release_date": "2020-01-21",
+      "vram": "6 GB",
+      "series": "RX 5000",
+      "picture": "https://example.com/amd_radeon_rx_5600_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 6700 XT",
+      "release_date": "2021-03-18",
+      "vram": "12 GB",
+      "series": "RX 6000",
+      "picture": "https://example.com/amd_radeon_rx_6700_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 6800",
+      "release_date": "2020-11-18",
+      "vram": "16 GB",
+      "series": "RX 6000",
+      "picture": "https://example.com/amd_radeon_rx_6800.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 6800 XT",
+      "release_date": "2020-11-18",
+      "vram": "16 GB",
+      "series": "RX 6000",
+      "picture": "https://example.com/amd_radeon_rx_6800_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 6900 XT",
+      "release_date": "2020-12-08",
+      "vram": "16 GB",
+      "series": "RX 6000",
+      "picture": "https://example.com/amd_radeon_rx_6900_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 7600",
+      "release_date": "2023-05-25",
+      "vram": "8 GB",
+      "series": "RX 7000",
+      "picture": "https://example.com/amd_radeon_rx_7600.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 7700 XT",
+      "release_date": "2023-09-06",
+      "vram": "12 GB",
+      "series": "RX 7000",
+      "picture": "https://example.com/amd_radeon_rx_7700_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 7800 XT",
+      "release_date": "2023-09-06",
+      "vram": "16 GB",
+      "series": "RX 7000",
+      "picture": "https://example.com/amd_radeon_rx_7800_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 7900 XT",
+      "release_date": "2022-12-13",
+      "vram": "20 GB",
+      "series": "RX 7000",
+      "picture": "https://example.com/amd_radeon_rx_7900_xt.jpg"
+    },
+    {
+      "name": "AMD Radeon RX 7900 XTX",
+      "release_date": "2022-12-13",
+      "vram": "24 GB",
+      "series": "RX 7000",
+      "picture": "https://example.com/amd_radeon_rx_7900_xtx.jpg"
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "gpus": [
+    {
+      "name": "NVIDIA GeForce GTX 1050",
+      "release_date": "2016-10-25",
+      "vram": "2 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1050.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce GTX 1050 Ti",
+      "release_date": "2016-10-25",
+      "vram": "4 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1050_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce GTX 1060",
+      "release_date": "2016-07-19",
+      "vram": "6 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1060.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce GTX 1070",
+      "release_date": "2016-06-10",
+      "vram": "8 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1070.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce GTX 1070 Ti",
+      "release_date": "2017-11-02",
+      "vram": "8 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1070_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce GTX 1080",
+      "release_date": "2016-05-27",
+      "vram": "8 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1080.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce GTX 1080 Ti",
+      "release_date": "2017-03-10",
+      "vram": "11 GB",
+      "series": "GeForce 10",
+      "picture": "https://example.com/nvidia_geforce_gtx_1080_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2060",
+      "release_date": "2019-01-15",
+      "vram": "6 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2060.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2060 Super",
+      "release_date": "2019-07-09",
+      "vram": "8 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2060_super.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2070",
+      "release_date": "2018-10-17",
+      "vram": "8 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2070.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2070 Super",
+      "release_date": "2019-07-09",
+      "vram": "8 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2070_super.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080",
+      "release_date": "2018-09-20",
+      "vram": "8 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2080.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Super",
+      "release_date": "2019-07-23",
+      "vram": "8 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2080_super.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "release_date": "2018-09-27",
+      "vram": "11 GB",
+      "series": "GeForce 20",
+      "picture": "https://example.com/nvidia_geforce_rtx_2080_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3060",
+      "release_date": "2021-02-25",
+      "vram": "12 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3060.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3060 Ti",
+      "release_date": "2020-12-02",
+      "vram": "8 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3060_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3070",
+      "release_date": "2020-10-29",
+      "vram": "8 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3070.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3070 Ti",
+      "release_date": "2021-06-10",
+      "vram": "8 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3070_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3080",
+      "release_date": "2020-09-17",
+      "vram": "10 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3080.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3080 Ti",
+      "release_date": "2021-06-03",
+      "vram": "12 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3080_ti.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3090",
+      "release_date": "2020-09-24",
+      "vram": "24 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3090.jpg"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 3090 Ti",
+      "release_date": "2022-03-29",
+      "vram": "24 GB",
+      "series": "GeForce 30",
+      "picture": "https://example.com/nvidia_geforce_rtx_3090_ti.jpg"
+    }
+  ]
+}

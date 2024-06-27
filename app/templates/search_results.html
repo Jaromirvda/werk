@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<h1>Search Results</h1>
+
+{% for gpu in amd_results %}
+<div>
+    <h2>{{ gpu.name }}</h2>
+    <p>Release Date: {{ gpu.release_date }}</p>
+    <p>VRAM: {{ gpu.vram }}</p>
+    <p>Series: {{ gpu.series }}</p>
+    <img src="{{ gpu.picture }}" alt="{{ gpu.name }}" width="200">
+</div>
+{% endfor %}
+
+{% for gpu in nvidia_results %}
+<div>
+    <h2>{{ gpu.name }}</h2>
+    <p>Release Date: {{ gpu.release_date }}</p>
+    <p>VRAM: {{ gpu.vram }}</p>
+    <p>Series: {{ gpu.series }}</p>
+    <img src="{{ gpu.picture }}" alt="{{ gpu.name }}" width="200">
+    <ul>
+        {% if gpu.series == 'created series' %}
+        <form method="POST" action="{{ url_for('edit_gpu', id=gpu.id) }}">
+            <button type="submit">Edit</button>
+        </form>
+        <form method="POST" action="{{ url_for('delete', id=gpu.id) }}">
+            <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+    </ul>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<h1>Search</h1>
+<p>please enter the name of the gpu</p>
+<form action="/search" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.search.label }}<br>
+        {{ form.search(size=32) }}<br>
+        {% for error in form.search.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}

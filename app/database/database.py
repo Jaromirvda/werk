@@ -1,52 +1,43 @@
 import json
-import os
 import sqlite3
 
-import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv()
 
-with open('data/character.json', 'r') as file:
+with open('data/nvidia.json', 'r') as file:
     data = json.load(file)
 
-
-
-
-characters = []
-for character in data['data']['results']:
-    char_id = character['id']
-    name = character['name']
-    description = character['description']
-    characters.append((char_id, name, description))
+gpus = []
+for gpu in data['gpus']:
+    name = gpu['name']
+    release_date = gpu['release_date']
+    vram = gpu['vram']
+    series = gpu['series']
+    picture = gpu['picture']
+    gpus.append((name, release_date, vram, series, picture))
 try:
 
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('database/werk.db')
     cursor = conn.cursor()
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS heroes (
-            id INTEGER PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS nvidia (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            description TEXT
+            release_date TEXT NOT NULL,
+            vram TEXT NOT NULL,
+            series TEXT NOT NULL,
+            picture TEXT NOT NULL
         )
-    ''')
+        ''')
 
-    cursor.executemany('INSERT INTO heroes (id, name, bio) VALUES (%s, %s, %s)', characters)
-
-    cursor.execute('''
-                CREATE TABLE IF NOT EXISTS hero_list (
-                    id INTEGER PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    rating INTEGER NOT NULL,
-                    user_id INTEGER NOT NULL,
-                    FOREIGN KEY (user_id) REFERENCES user(id)
-                )
-            ''')
+    cursor.executemany('INSERT INTO nvidia (name, release_date, vram, series, picture ) VALUES (?, ?, ?, ?, ?)',
+                       gpus)
 
     conn.commit()
     conn.close()
+    print('Data inserted successfully')
 
-except psycopg2.Error as e:
-    print(f"Error connecting to PostgreSQL database: {e}")
+except Exception as e:
+    print(e)
