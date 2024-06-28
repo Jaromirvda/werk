@@ -1,22 +1,17 @@
 {% extends "base/base.html" %}
 
 {% block content %}
-<body>
-    <h1>Edit GPU</h1>
-    <form method="POST" action="{{ url_for('edit_gpu', id=gpu.id) }}">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="{{ gpu.name }}"><br>
-
-        <label for="release_date">Release Date:</label>
-        <input type="text" id="release_date" name="release_date" value="{{ gpu.release_date }}"><br>
-
-        <label for="vram">VRAM:</label>
-        <input type="text" id="vram" name="vram" value="{{ gpu.vram }}"><br>
-
-        <label for="picture">Picture:</label>
-        <input type="text" id="picture" name="picture" value="{{ gpu.picture }}"><br>
-
-        <input type="submit" value="Submit">
-    </form>
-</body>
+<h1>Edit GPU</h1>
+<form method="POST" action="{{ url_for('edit_gpu', id=gpu.id) }}">
+    {{ form.hidden_tag() }}
+    <input type="text" name="name" placeholder="Name" value="{{ form.name.data }}" required>
+    <input type="date" name="release_date" placeholder="Release Date" value="{{ form.release_date.data }}" required>
+    <input type="text" name="vram" placeholder="VRAM" value="{{ form.vram.data }}" required>
+    <input type="text" name="picture" placeholder="Picture URL" value="{{ form.picture.data }}" required>
+    <select name="category">
+        <option value="Nvidia" {% if form.category.data == 'Nvidia' %}selected{% endif %}>Nvidia</option>
+        <option value="AMD" {% if form.category.data == 'AMD' %}selected{% endif %}>AMD</option>
+    </select>
+    <button type="submit">Save</button>
+</form>
 {% endblock %}
