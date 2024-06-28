@@ -1,5 +1,4 @@
-import bcrypt
-from flask import render_template, request, url_for, redirect, flash, session
+from flask import render_template, request, url_for, redirect, flash, jsonify
 
 from app.form.createGPU import CreateGPUForm
 from app.form.searchForm import searchForm
@@ -12,6 +11,13 @@ from app import app
 
 s = Session()
 
+# global variables
+amd = s.query(AMD).filter_by(id=id).first()
+nvidia = s.query(Nvidia).filter_by(id=id).first()
+
+form1 = CreateGPUForm()
+form2 = searchForm()
+
 
 @app.route('/')
 @app.route('/index')
@@ -21,37 +27,36 @@ def index():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    form = searchForm()
-    if form.validate_on_submit():
-        amd_results = s.query(AMD).filter(AMD.name.ilike(f'%{form.search.data}%')).all()
-        nvidia_results = s.query(Nvidia).filter(Nvidia.name.ilike(f'%{form.search.data}%')).all()
+    if form2.validate_on_submit():
+        amd_results = s.query(AMD).filter(AMD.name.ilike(f'%{form2.search.data}%')).all()
+        nvidia_results = s.query(Nvidia).filter(Nvidia.name.ilike(f'%{form2.search.data}%')).all()
 
         return render_template('search_results.html', amd_results=amd_results, nvidia_results=nvidia_results)
 
-    return render_template('search.html', form=form)
+    return render_template('search.html', form=form2)
+
 
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
     return render_template('edit.html')
 
 
-
 @app.route('/delete_gpu/<int:id>', methods=['GET', 'POST'])
 def delete(id):
-        gpu = s.query(Nvidia).filter_by(id=id).first()
-        if gpu.series == 'created series':
+    gpu = s.query(Nvidia).filter_by(id=id).first()
+    if gpu.series == 'created series':
+        s.delete(gpu)
+        s.commit()
+        return redirect(url_for('nvidia'))
+    else:
+        gpu = s.query(AMD).filter_by(id=id).first()
+        if gpu:
             s.delete(gpu)
             s.commit()
-            return redirect(url_for('nvidia'))
+            return redirect(url_for('amd'))
         else:
-            gpu = s.query(AMD).filter_by(id=id).first()
-            if gpu:
-                s.delete(gpu)
-                s.commit()
-                return redirect(url_for('amd'))
-            else:
-                flash('GPU not found')
-                return redirect(url_for('home'))
+            flash('GPU not found')
+            return redirect(url_for('home'))
 
 
 @app.route('/nvidia', methods=['GET'])
@@ -94,7 +99,6 @@ def amd():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-
     cursor.execute("SELECT DISTINCT series FROM amd")
     series_options = [row['series'] for row in cursor.fetchall()]
 
@@ -122,63 +126,66 @@ def amd():
 
     return render_template('amd.html', gpus=gpus, series_options=series_options, vram_options=vram_options)
 
+
 @app.route('/create_gpu', methods=['GET', 'POST'])
 def createGPU():
-    form = CreateGPUForm()
-    if form.validate_on_submit():
-        category = form.category.data
+    if form1.validate_on_submit():
+        category = form1.category.data
         if category == 'Nvidia':
-            nvidia = Nvidia(form.name.data, form.release_date.data, form.vram.data, 'created series', form.picture.data)
+            nvidia = Nvidia(form1.name.data, form1.release_date.data, form1.vram.data, 'created series', form1.picture.data)
             s.add(nvidia)
             s.commit()
             return redirect(url_for('nvidia'))
         elif category == 'AMD':
-            amd = AMD(form.name.data, form.release_date.data, form.vram.data, 'created series', form.picture.data)
+            amd = AMD(form1.name.data, form1.release_date.data, form1.vram.data, 'created series', form1.picture.data)
             s.add(amd)
             s.commit()
             return redirect(url_for('amd'))
 
-    return render_template('create_gpu.html', form=form)
+    return render_template('create_gpu.html', form=form1)
 
-@app.route('/edit_gpu/<int:id>', methods=['GET', 'POST'])
+
+@app.route('/edit_gpu/<int:id>', methods=['GET', 'PUT'])
 def edit_gpu(id):
-    form = CreateGPUForm()
-    gpu = s.query(Nvidia).filter_by(id=id).first()
-    if gpu.series != 'created series':
-        gpu = s.query(AMD).filter_by(id=id).first()
+    nvidia(id)
+    if nvidia.series != 'created series':
+        amd(id)
+        if amd:
+            amd.name = form1.name.data
+            amd.release_date = form1.release_date.data
+            amd.vram = form1.vram.data
+            amd.series = 'created series'
+            amd.picture = form1.picture.data
+    else:
+        nvidia.name = form1.name.data
+        nvidia.release_date = form1.release_date.data
+        nvidia.vram = form1.vram.data
+        nvidia.series = 'created series'
+        nvidia.picture = form1.picture.data
 
-    if request.method == 'GET':
-        if gpu:
-            form.name.data = gpu.name
-            form.release_date.data = gpu.release_date
-            form.vram.data = gpu.vram
-            form.picture.data = gpu.picture
-        else:
-            flash('GPU not found', 'error')
-            return redirect(url_for('nvidia'))
+    if nvidia and amd is None:
+        return jsonify({'error': 'GPU not found'}), 404
 
-    if form.validate_on_submit():
-        category = form.category.data
+    if form1.validate_on_submit():
+        category = form1.category.data
         if category == 'Nvidia':
-            gpu.name = form.name.data
-            gpu.release_date = form.release_date.data
-            gpu.vram = form.vram.data
-            gpu.series = 'created series'
-            gpu.picture = form.picture.data
-            s.commit()
-            return redirect(url_for('nvidia'))
+            nvidia.name = form1.name.data
+            nvidia.release_date = form1.release_date.data
+            nvidia.vram = form1.vram.data
+            nvidia.series = 'created series'
+            nvidia.picture = form1.picture.data
         elif category == 'AMD':
-            gpu = s.query(AMD).filter_by(id=id).first()
-            if amd:
-                gpu.name = form.name.data
-                gpu.release_date = form.release_date.data
-                gpu.vram = form.vram.data
-                gpu.series = 'created series'
-                gpu.picture = form.picture.data
-                s.commit()
-                return redirect(url_for('amd'))
-            else:
-                flash('AMD GPU not found', 'error')
-                return redirect(url_for('amd'))
+            amd(id)
+            amd.name = form1.name.data
+            amd.release_date = form1.release_date.data
+            amd.vram = form1.vram.data
+            amd.series = 'created series'
+            amd.picture = form1.picture.data
+        else:
+            return jsonify({'error': 'AMD GPU not found'}), 404
 
-    return render_template('edit_gpu.html', form=form, gpu=gpu)
+        s.commit()
+        return jsonify({'success': 'GPU updated successfully'})
+
+    return jsonify({'error': 'Invalid data'}), 400
+
