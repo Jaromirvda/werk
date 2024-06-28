@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<h1>All GPUs</h1>
+
+<h2>Nvidia GPUs</h2>
+<ul>
+    {% for item in nvidia %}
+    <p>{{ item.name }}</p>
+    {% endfor %}
+</ul>
+
+<h2>AMD GPUs</h2>
+<ul>
+    {% for item in amd %}
+    <p>{{ item.name }}</p>
+    {% endfor %}
+</ul>
+{% endblock %}

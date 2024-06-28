@@ -1,7 +1,6 @@
 import json
 
 from flask import render_template, request, url_for, redirect, flash, jsonify
-from werkzeug.debug import console
 
 from app.form.createGPU import CreateGPUForm
 from app.form.searchForm import searchForm
@@ -10,9 +9,13 @@ from app.models.nvidia import Nvidia
 from app.database.session import Session
 from app.database.databaseConnection import get_db_connection
 
+from app.database.json_updater import update_json_file
+
 from app import app
 
 s = Session()
+
+
 
 
 @app.route('/')
@@ -38,41 +41,24 @@ def edit():
     return render_template('edit.html')
 
 
-@app.route('/delete_gpu/<int:id>', methods=['GET', 'POST'])
+@app.route('/item/<int:id>', methods=['DELETE'])
 def delete(id):
-    gpu = s.query(Nvidia).filter_by(id=id).first()
-    if gpu.series == 'created series':
-        s.delete(gpu)
-        s.commit()
-        with open('./app/database/data/nvidia.json', 'w') as file:
-            data = json.load(file)
-        for gpu in data['gpus']:
-            if gpu['id'] == id and gpu['series'] == 'created series':
-                data['gpus'].remove(gpu)
-                with open('nvidia.json', 'w') as file:
-                    json.dump(data, file)
-        return redirect(url_for('nvidia'))
+    gpu = Nvidia.query.filter_by(id=id, series='created series').first()
+    if gpu:
+        s.session.delete(gpu)
+        s.session.commit()
+        update_json_file('./app/database/data/nvidia.json', id)
+        return jsonify({"message": "Nvidia GPU deleted successfully"}), 200
 
+    gpu = AMD.query.filter_by(id=id, series='created series').first()
+    if gpu:
+        db.session.delete(gpu)
+        db.session.commit()
+        update_json_file('./app/database/data/amd.json', id)
+        return jsonify({"message": "AMD GPU deleted successfully"}), 200
 
-    else:
-        gpu = s.query(AMD).filter_by(id=id).first()
-        if gpu:
-            s.delete(gpu)
-            s.commit()
-            with open('./app/database/data/amd.json', 'r') as file:
-                data = json.load(file)
-            for gpu in data['gpus']:
-                if gpu['id'] == id and gpu['series'] == 'created series':
-                    data['gpus'].remove(gpu)
-                    with open('amd.json', 'w') as file:
-                        json.dump(data, file)
+    return jsonify({"error": "GPU not found"}), 404
 
-            flash('GPU deleted successfully')
-
-            return redirect(url_for('amd'))
-        else:
-            flash('GPU not found')
-            return redirect(url_for('home'))
 
 
 @app.route('/nvidia', methods=['GET'])
@@ -144,7 +130,6 @@ def amd():
 
 
 @app.route('/create_gpu', methods=['GET', 'POST'])
-@app.route('/create_gpu', methods=['GET', 'POST'])
 def createGPU():
     form = CreateGPUForm()
     if form.validate_on_submit():
@@ -154,26 +139,6 @@ def createGPU():
                             series='created series', picture=form.picture.data)
             s.add(nvidia)
             s.commit()
-            # Retrieve the ID after commit
-            gpu_id = nvidia.id
-
-            # Update the JSON file
-            file_path = './app/database/data/nvidia.json'
-            with open(file_path, 'r') as file:
-                data = json.load(file)
-
-            new_gpu = {
-                'id': gpu_id,
-                'name': form.name.data,
-                'release_date': form.release_date.data,
-                'vram': form.vram.data,
-                'series': 'created series',
-                'picture': form.picture.data
-            }
-            data['gpus'].append(new_gpu)
-
-            with open(file_path, 'w') as file:
-                json.dump(data, file, indent=4)
 
             return redirect(url_for('nvidia'))
         elif category == 'AMD':
@@ -182,45 +147,43 @@ def createGPU():
             s.add(amd)
             s.commit()
 
-            gpu_id = amd.id
-
-
-            file_path = './app/database/data/amd.json'
-            with open(file_path, 'r') as file:
-                data = json.load(file)
-
-            new_gpu = {
-                'id': gpu_id,
-                'name': form.name.data,
-                'release_date': form.release_date.data,
-                'vram': form.vram.data,
-                'series': 'created series',
-                'picture': form.picture.data
-            }
-            data['gpus'].append(new_gpu)
-
-            with open(file_path, 'w') as file:
-                json.dump(data, file, indent=4)
-
             return redirect(url_for('amd'))
 
     return render_template('create_gpu.html', form=form)
 
 
-@app.route('/edit_gpu/<int:id>', methods=['GET', 'POST'])
+@app.route('/items', methods=['GET', 'POST'])
+def items():
+
+    nvidia = s.query(Nvidia).all()
+    amd = s.query(AMD).all()
+    return render_template('items.html', nvidia=nvidia, amd=amd)
+
+
+@app.route('/item/<int:id>', methods=['PUT'])
 def edit_gpu(id):
     form = CreateGPUForm()
-
-    # Fetch the GPU record
     nvidia = s.query(Nvidia).filter_by(id=id).first()
-    amd = s.query(AMD).filter_by(id=id).first()
+    if nvidia.series == 'created series':
+        gpu = nvidia
+        form.name.data = gpu.name
+        form.release_date.data = gpu.release_date
+        form.vram.data = gpu.vram
+        form.picture.data = gpu.picture
+        form.category.data = 'Nvidia' if nvidia else 'AMD'
 
-    gpu = nvidia if nvidia.series == 'created series' else amd
-    print(gpu)
+    elif amd.series == 'created series':
+        gpu = amd
+        form.name.data = gpu.name
+        form.release_date.data = gpu.release_date
+        form.vram.data = gpu.vram
+        form.picture.data = gpu.picture
+        form.category.data = 'Nvidia' if nvidia else 'AMD'
 
-    if not gpu:
-        flash('GPU not found', 'error')
-        return redirect(url_for('nvidia'))
+
+    else:
+        flash('GPU not found')
+        return redirect(url_for('home'))
 
     if request.method == 'GET':
         form.name.data = gpu.name
@@ -243,26 +206,23 @@ def edit_gpu(id):
 
         s.commit()
 
-        # Update JSON file
+        new_gpu = {
+            'id': gpu.id,
+            'name': gpu.name,
+            'release_date': gpu.release_date,
+            'vram': gpu.vram,
+            'picture': gpu.picture
+        }
         if nvidia:
-            file_path = './app/database/data/nvidia.json'
+            with open('./app/database/data/nvidia.json', 'w'):
+                data = json.load(open('./app/database/data/nvidia.json'))
+                data.append(new_gpu)
+                jsonify('GPU has been updated!')
         else:
-            file_path = './app/database/data/amd.json'
-
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-
-        for gpu_data in data['gpus']:
-            if gpu_data['id'] == id:
-                gpu_data['name'] = form.name.data
-                gpu_data['release_date'] = form.release_date.data
-                gpu_data['vram'] = form.vram.data
-                gpu_data['picture'] = form.picture.data
-                break
-
-        with open(file_path, 'w') as file:
-            json.dump(data, file, indent=4)
-
+            with open('./app/database/data/amd.json', 'w'):
+                data = json.load(open('./app/database/data/amd.json'))
+                data.append(new_gpu)
+                jsonify('GPU has been updated!')
         flash('GPU updated successfully', 'success')
         return redirect(url_for('nvidia' if nvidia else 'amd'))
 

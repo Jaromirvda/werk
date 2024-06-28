@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Edit GPU</h1>
-<form method="POST" action="{{ url_for('edit_gpu', id=gpu.id) }}">
+<form method="POST" action="{{ url_for('item', id=gpu.id) }}">
     {{ form.hidden_tag() }}
     <input type="text" name="name" placeholder="Name" value="{{ form.name.data }}" required>
     <input type="date" name="release_date" placeholder="Release Date" value="{{ form.release_date.data }}" required>
